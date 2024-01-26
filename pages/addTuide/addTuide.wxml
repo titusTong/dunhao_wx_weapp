@@ -1,0 +1,82 @@
+<!--pages/addTuide/addTuide.wxml-->
+<view>
+  <van-notify id="custom-selector" />
+  <van-cell-group>
+    <van-field
+      value="{{ tripName }}"
+      required
+      clearable
+      data-name="tripName"
+      bind:change="onFieldChange"
+      disabled="{{isDisabled}}"
+      label="团名称"
+      placeholder="请输入团名称"
+    />
+    <van-field
+      value="{{ operator }}"
+      required
+      clearable
+      data-name="operator"
+      bind:change="onFieldChange"
+      disabled="{{isDisabled}}"
+      label="操作人"
+      placeholder="请输入操作人"
+    />
+    
+    <van-field
+      value="{{ inArea }}"
+      data-name="inArea"
+      bind:change="onFieldChange"
+      required
+      clearable
+      disabled="{{isDisabled}}"
+      label="入境点"
+      placeholder="请输入入境点"
+    />
+    <van-field
+      value="{{ outArea }}"
+      data-name="outArea"
+      bind:change="onFieldChange"
+      required
+      clearable
+      disabled="{{isDisabled}}"
+      label="出境点"
+      placeholder="请输入出境点"
+    />
+    
+    <van-field wx:if="{{isDisabled}}" required disabled="{{isDisabled}}" data-name="date" bind:change="onFieldChange" label="选择团期" value="{{ date }}" bind:click="onDisplay" />
+    <van-cell wx:else required title="选择团期" value="{{ date }}" bind:click="onDisplay" />
+    <van-calendar
+      default-date="{{date}}"
+      show="{{ show }}"
+      type="range"
+      disabled="{{isDisabled}}"
+      allow-same-day="{{true}}"
+      formatter="{{ formatter }}"
+      bind:scroll-end="onScrollEnd"
+      bind:close="onClose"
+      bind:confirm="onConfirm"
+    />
+    <van-radio-group disabled="{{isDisabled}}" value="{{ guideType }}" >
+      <van-cell title="司兼导" clickable data-value="1" data-name="1" bind:click="onClick">
+        <van-radio checked-color="red" slot="right-icon" name="1" />
+      </van-cell>
+      <van-cell title="司导分" clickable data-value="2" data-name="2" bind:click="onClick">
+        <van-radio checked-color="red" slot="right-icon" name="2" />
+      </van-cell>
+    </van-radio-group>
+    <van-field
+      value="{{ remark }}"
+      clearable
+      data-name="remark"
+      bind:change="onFieldChange"
+      disabled="{{isDisabled}}"
+      type="textarea"
+      autosize="{{true}}"
+      label="备注"
+      placeholder="请输入备注"
+    />
+    
+  </van-cell-group>
+  <van-button bind:click="submit" disabled="{{isDisabled}}" block class="submitBtn" type="danger">提交</van-button>
+</view>

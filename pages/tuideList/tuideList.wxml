@@ -1,0 +1,56 @@
+<view>
+<scroll-view bindscroll="handleScroll" scroll-y="true" class="calendar" >
+  <van-calendar
+  type="multiple"
+  readonly="{{true}}"
+  default-date="{{defaultDate}}"
+  poppable="{{ false }}"
+  show-confirm="{{ false }}"
+  minDate="{{minDate}}"
+  maxDate="{{maxDate}}"
+  title="{{'日历'}}"
+  show-title="{{false}}"
+  row-height="{{32}}"
+  colorDate="{{colorDate}}"
+  bind:touchstart="clickSubtitle"
+  bind:click-subtitle="clickSubtitle"
+  bind:scroll-end="onScrollEnd"
+/> 
+</scroll-view>
+<van-icon size="{{40}}" bind:tap="addTuide" color="red" class="addTuide" name="add-o" />
+<scroll-view scroll-y="true" class="scroll-height">
+  <block wx:if="{{ list && list.length }}">
+    <block wx:for="{{ list }}" wx:for-item="item" wx:for-index="index" wx:key="index">
+      
+      <view class="list-content"  >
+        <van-swipe-cell bind:click="deleteTuide" data-id="{{item.id}}" disabled="{{item.createPersonOpId != curUserOpenId}}" right-width="{{ 50 }}">
+          <view bindtap="gotoDetail" data-id="{{item.id}}">
+            <view class="list-top">
+              <view class="tripName" style="background-color: {{item.color}}">{{ item.tripName }}</view>
+              <view wx:if="{{item.inArea && item.outArea}}">{{ item.inArea }}-{{item.outArea}}</view>
+              <view wx:if="{{item.guideType}}">{{ item.guideType == 1 ? '司兼导' : '司导分' }}</view>
+            </view>
+            <view class="list-bottom">
+              <view wx:if="{{item.operator}}">操作：{{ item.operator }}</view>
+              <view>{{item.dateString}}</view>
+            </view>
+          </view>
+          
+          
+          <view  slot="right" class="van-swipe-cell__right">
+            删除
+          </view>
+        </van-swipe-cell>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <van-empty description="当前时间段内没有数据" />
+  </block>
+</scroll-view>
+<van-dialog id="van-dialog" />
+<van-notify id="custom-selector" />
+<!-- <view class="form-box">
+  <button type="primary" open-type="getPhoneNumber" class="login-btn two" bindgetphonenumber="getPhoneNumber" catch:tap="wxBack">暂不授权</button>
+</view> -->
+</view>

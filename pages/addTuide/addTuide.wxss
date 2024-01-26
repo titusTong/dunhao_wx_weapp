@@ -1,0 +1,6 @@
+/* pages/addTuide/addTuide.wxss */
+.submitBtn {
+  position: fixed;
+  bottom: 0;
+  width: 100% !important;
+}

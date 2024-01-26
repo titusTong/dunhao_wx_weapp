@@ -1,0 +1,55 @@
+/* pages/tuideList/tuideList.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.calendar {
+  --calendar-height: 54vh;
+  margin-bottom: 0.5vh;
+  padding-bottom: 10rpx;
+  border-bottom: 5px solid #f0f0f0;
+}
+.addTuide {
+  position: absolute;
+  bottom: 50rpx;
+  right: 50rpx;
+  z-index: 9999;
+}
+.list-content {
+  padding: 20rpx;
+  font-size: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  /* margin: 20rpx 0; */
+}
+.list-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5rpx;
+  padding-right: 10px;
+}
+.tripName {
+  font-weight: 500;
+  padding: 10rpx;
+  border-radius: 10px;
+  width: 40%;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.list-bottom {
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.scroll-height {
+  height: 44vh;
+}
+.van-swipe-cell__right {
+  width: 100rpx; /* 设置按钮宽度 */
+  background-color: #ff0000; /* 设置按钮背景颜色 */
+  color: #ffffff; /* 设置按钮文字颜色 */
+  text-align: center; /* 设置文字居中 */
+  line-height: 100rpx; /* 设置文字行高，保持文字垂直居中 */
+}

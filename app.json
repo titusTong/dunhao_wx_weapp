@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/userMsg/userMsg",
+    "pages/list/list",
+    "pages/tuideList/tuideList",
+    "pages/addTuide/addTuide"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "usingComponents": {
+    "van-calendar": "./pages/vant/calendar/index",
+    "van-field": "./pages/vant/field/index",
+    "van-cell": "./pages/vant/cell/index",
+    "van-cell-group": "./pages/vant/cell-group/index",
+    "van-button": "./pages/vant/button/index",
+    "van-notify": "./pages/vant/notify/index",
+    "van-index-bar": "./pages/vant/index-bar/index",
+    "van-index-anchor": "./pages/vant/index-anchor/index",
+    "van-loading": "./pages/vant/loading/index",
+    "van-swipe-cell": "./pages/vant/swipe-cell/index",
+    "van-dialog": "./pages/vant/dialog/index",
+    "van-radio": "./pages/vant/radio/index",
+    "van-radio-group": "./pages/vant/radio-group/index"
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "moment": "^2.30.1"
+  },
+  "name": "vdr_wxapp",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
