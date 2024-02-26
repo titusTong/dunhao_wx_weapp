@@ -6,6 +6,23 @@
     placeholder="请输入姓名或地区"
     bind:change="onSearch"
   />
+  <van-search
+    show-action
+    bind:cancel="onSearchCalendarCancel"
+    bind:focus="onDisplay"
+    value="{{ date }}"
+    bind:change="onCalendarSearch"
+    placeholder="查询此时间段内空闲的导游"
+    custom-class="calendar-custom-class"
+  />
+  <!-- <van-cell title="选择日期区间" value="{{ date }}" bind:click="onDisplay" /> -->
+  <van-calendar
+    show="{{ show }}"
+    type="range"
+    allow-same-day
+    bind:close="onClose"
+    bind:confirm="onConfirm"
+  />
   <view>
   <view wx:if="{{isShowLoading}}" class="loading">
     <van-loading  />

@@ -8,7 +8,9 @@ Page({
   data: {
     list: [],
     searchValue: '',
-    isShowLoading: false
+    isShowLoading: false,
+    date: '',
+    show: false,
   },
 
   /**
@@ -33,8 +35,58 @@ Page({
 
   },
 
+  onDisplay() {
+    this.setData({ show: true });
+  },
+  onClose() {
+    this.setData({ show: false });
+  },
+  formatDate(date, isSubmit) {
+    date = new Date(date);
+    if(isSubmit) {
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    } else {
+      return `${date.getMonth() + 1}月${date.getDate()}日`;
+    }
+    
+  },
+  onConfirm: async function(event) {
+    const [start, end] = event.detail;
+    this.setData({
+      show: false,
+      date: `${this.formatDate(start)} - ${this.formatDate(end)}`,
+    });
+    const res = await app.call({
+      path:'/author/findUserByParams',
+      method: 'post',
+      data: {content: this.data.searchValue, sartTime: this.formatDate(start,1), endTime: this.formatDate(end,1)}
+    })
+    this.setData({isShowLoading: false})
+    if(res.code === 1) {
+      this.setData({
+        list: res.data
+      })
+    }
+  },
+  onSearchCalendarCancel(event) {
+    console.log(event);
+    // event.
+  },
+  onCalendarSearch: async function(e) {
+    const res = await app.call({
+      path:'/author/findUserByParams',
+      method: 'post',
+      data: {content: this.data.searchValue, sartTime: '', endTime: ''}
+    })
+    this.setData({isShowLoading: false})
+    if(res.code === 1) {
+      this.setData({
+        list: res.data
+      })
+    }
+  },
+
   onSearch: async function(e) {
-    console.log(e.detail);
     this.setData({isShowLoading: true})
     const res = await app.call({
       path:'/author/findUserByParams',
@@ -43,9 +95,6 @@ Page({
     })
     this.setData({isShowLoading: false})
     if(res.code === 1) {
-      console.log('res', res);
-      // this.data.list = res.data;
-      // this.update();
       this.setData({
         list: res.data
       })
