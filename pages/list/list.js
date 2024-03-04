@@ -1,4 +1,5 @@
 // pages/list/list.js
+import moment from 'moment';
 var app = getApp();
 Page({
 
@@ -11,6 +12,10 @@ Page({
     isShowLoading: false,
     date: '',
     show: false,
+    defaultDate: [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
+  },
+  onShow(){
+    console.log(111);
   },
 
   /**
@@ -18,24 +23,44 @@ Page({
    */
   onLoad: async function (options) {
     console.log('options',options);
+    this.getTabBar().init()
+
     wx.setNavigationBarTitle({
       title: '导游列表'
     });
-    this.setData({isShowLoading: true})
+    this.setData({isShowLoading: true});
+    
     const res = await app.call({
+      path:'/author/getUser'
+    })
+    if(res.code == '-100') {
+      wx.redirectTo({url : '../userMsg/userMsg'});
+    } else if(res.code == '1') {
+      wx.setStorage({
+        key: 'userInfo',
+        data: res.data 
+      })
+      if(res.data.userType == 1) {
+        // wx.redirectTo({url : '../list/list'});
+      } else {
+        wx.redirectTo({url : `../tuideList/tuideList?name=${res.data.name}&area=${res.data.area}`});
+      }
+    }
+    const data = await app.call({
       path:'/author/findUserByParams',
       method: 'post',
     })
-    if(res.code === 1) {
+    if(data.code === 1) {
       this.setData({
-        list: res.data,
+        list: data.data,
         isShowLoading: false
       })
     }
 
   },
 
-  onDisplay() {
+  onDisplay(event) {
+    console.log('event',event);
     this.setData({ show: true });
   },
   onClose() {
@@ -43,8 +68,16 @@ Page({
   },
   formatDate(date, isSubmit) {
     date = new Date(date);
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if(month < 10) {
+      month = '0' + month;
+    } 
+    if(day < 10) {
+      day = '0' + day
+    }
     if(isSubmit) {
-      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      return `${date.getFullYear()}-${month}-${day}`;
     } else {
       return `${date.getMonth() + 1}月${date.getDate()}日`;
     }
@@ -59,7 +92,7 @@ Page({
     const res = await app.call({
       path:'/author/findUserByParams',
       method: 'post',
-      data: {content: this.data.searchValue, sartTime: this.formatDate(start,1), endTime: this.formatDate(end,1)}
+      data: {content: this.data.searchValue, startTime: this.formatDate(start,1), endTime: this.formatDate(end,1)}
     })
     this.setData({isShowLoading: false})
     if(res.code === 1) {
@@ -69,14 +102,15 @@ Page({
     }
   },
   onSearchCalendarCancel(event) {
-    console.log(event);
-    // event.
+    this.setData({
+      defaultDate: [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
+    })
   },
   onCalendarSearch: async function(e) {
     const res = await app.call({
       path:'/author/findUserByParams',
       method: 'post',
-      data: {content: this.data.searchValue, sartTime: '', endTime: ''}
+      data: {content: this.data.searchValue, startTime: '', endTime: ''}
     })
     this.setData({isShowLoading: false})
     if(res.code === 1) {

@@ -1,0 +1,40 @@
+<!--pages/myAdd/myAdd.wxml-->
+<view>
+  <van-notify id="custom-selector" />
+  <van-dialog id="van-dialog" />
+  <van-search
+    value="{{ searchValue }}"
+    placeholder="请输入导游名或者团名"
+    bind:change="onSearch"
+  />
+  <scroll-view scroll-y="true" class="scroll-height">
+    <block wx:if="{{ list && list.length }}">
+      <block wx:for="{{ list }}" wx:for-item="item" wx:for-index="index" wx:key="index">
+        
+        <view class="list-content"  >
+          <van-swipe-cell bind:click="deleteTuide" data-id="{{item.id}}" right-width="{{ 50 }}">
+            <view bindtap="gotoDetail" data-id="{{item.id}}">
+              <view class="list-top">
+                <view class="tripName" style="background-color: {{item.color}}">{{ item.tripName }}</view>
+                <view wx:if="{{item.inArea && item.outArea}}">{{ item.inArea }}-{{item.outArea}}</view>
+                <view wx:if="{{item.guideType}}">{{ item.guideType == 1 ? '司兼导' : '司导分' }}</view>
+              </view>
+              <view class="list-bottom">
+                <view wx:if="{{item.guideName}}">导游：{{ item.guideName }}</view>
+                <view>{{item.dateString}}</view>
+              </view>
+            </view>
+            
+            
+            <view  slot="right" class="van-swipe-cell__right">
+              删除
+            </view>
+          </van-swipe-cell>
+        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <van-empty description="没有数据" />
+    </block>
+  </scroll-view>
+</view>

@@ -1,5 +1,6 @@
 // pages/userMsg/userMsg.js
 import Notify from '../vant/notify/notify';
+
 var app = getApp();
 Page({
 
@@ -10,11 +11,20 @@ Page({
     name: '',
     area: '',
     inviteCode: '',
-    userType: 2
+    userType: 2,
+    columns: ['西欧', '南欧', '东欧' , '北欧', '英国', '希腊'],
+    show: false,
+    selectValue: '西欧',
   },
 
   methods: {
     
+  },
+  showPopup() {
+    this.setData({ show: true });
+  },
+  onClose() {
+    this.setData({ show: false });
   },
   onFieldChange(event) {
     let name = event.currentTarget.dataset.name;
@@ -23,6 +33,13 @@ Page({
       [name]: value
     },() => {
       console.log(this.data.tripName)
+    })
+  },
+  onChange(event) {
+    const { picker, value, index } = event.detail;
+    this.setData({
+      selectValue: value,
+      show: false
     })
   },
   
@@ -37,16 +54,13 @@ Page({
     if(!this.data.name) {
       Notify({backgroundColor: '#ad0000',message: '请输入名称', selector: '#custom-selector', context: this, duration: 1500});
       return;
-    } else if(!this.data.area) {
-      Notify({backgroundColor: '#ad0000',message: '请输入带团地区', selector: '#custom-selector', context: this, duration: 1500});
-      return;
     } else if(!this.data.inviteCode) {
       Notify({backgroundColor: '#ad0000',message: '请输入邀请码', selector: '#custom-selector', context: this, duration: 1500});
       return;
     }
     let params = {
       name: this.data.name,
-      area: this.data.area,
+      area: this.data.area ? this.data.selectValue + "-" +this.data.area : this.data.selectValue,
       inviteCode: this.data.inviteCode,
       userType: this.data.userType
     }
@@ -63,7 +77,7 @@ Page({
         data: res.data 
       })
       if(this.data.userType == 1) {
-        wx.redirectTo({url : '../list/list'});
+        wx.switchTab({url : '../list/list'});
       } else {
         wx.redirectTo({url : `../tuideList/tuideList?name=${this.data.name}&area=${this.data.area}`});
       }

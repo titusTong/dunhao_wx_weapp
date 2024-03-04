@@ -6,8 +6,15 @@
   border-bottom: 1px solid #f0f0f0;
 }
 .scroll-height {
-  height: calc(100vh - 108px);
+  height: calc(100vh - 108px - 60px);
 }
 .calendar-custom-class {
   padding-top: 0 !important;
+}
+.area {
+  width: 70%;
+  text-align: right;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

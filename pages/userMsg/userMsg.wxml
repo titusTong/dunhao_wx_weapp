@@ -12,14 +12,24 @@
       label="姓名"
       placeholder="请输入姓名"
     />
+    <van-cell required title="带团区域" placeholder="请选择带团区域" is-link bind:click="showPopup">
+      <view>{{selectValue}}</view>
+    </van-cell>
+    <van-popup 
+      position="bottom"
+      custom-style="height: 50%" 
+      show="{{ show }}" >
+      <van-picker default-index="0" show-toolbar bind:cancel="onClose" bind:confirm="onChange" columns="{{ columns }}" />
+    </van-popup>
+    
+
     <van-field
       value="{{ area }}"
-      required
       data-name="area"
       bind:change="onFieldChange"
       clearable
-      label="带团地区"
-      placeholder="请输入带团地区"
+      label="带团国家"
+      placeholder="请输入带团国家(可多个)"
     />
     <van-radio-group value="{{ userType }}">
       <van-cell-group>

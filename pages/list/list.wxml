@@ -7,9 +7,10 @@
     bind:change="onSearch"
   />
   <van-search
+    readonly
     show-action
     bind:cancel="onSearchCalendarCancel"
-    bind:focus="onDisplay"
+    bind:click-input="onDisplay"
     value="{{ date }}"
     bind:change="onCalendarSearch"
     placeholder="查询此时间段内空闲的导游"
@@ -17,6 +18,7 @@
   />
   <!-- <van-cell title="选择日期区间" value="{{ date }}" bind:click="onDisplay" /> -->
   <van-calendar
+    default-date="{{defaultDate}}"
     show="{{ show }}"
     type="range"
     allow-same-day
@@ -32,7 +34,7 @@
     <block wx:for="{{ list }}" wx:for-item="item" wx:for-index="index" wx:key="index">
       <view bindtap="goTotuideList" data-openId="{{item.openId}}" data-name="{{item.name}}" data-area="{{item.area}}" class="item-list">
         <view>{{ item.name }}</view>
-        <view>{{ item.area }}</view>
+        <view class="area">{{ item.area }}</view>
       </view>
     </block>
   </block>

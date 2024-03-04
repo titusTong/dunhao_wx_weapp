@@ -81,6 +81,7 @@ Page({
       url = '/trip/updateTrips';
       params.color = this.data.color;
       params.id = `${this.data.id}`;
+      params.createPersonOpId= this.data.createPersonOpId;
     }
     const res = await app.call({
       path:url,

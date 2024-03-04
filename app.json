@@ -1,11 +1,12 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/list/list",
     "pages/logs/logs",
     "pages/userMsg/userMsg",
-    "pages/list/list",
     "pages/tuideList/tuideList",
-    "pages/addTuide/addTuide"
+    "pages/addTuide/addTuide",
+    "pages/myAdd/myAdd",
+    "custom-tab-bar/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -25,7 +26,24 @@
     "van-swipe-cell": "./pages/vant/swipe-cell/index",
     "van-dialog": "./pages/vant/dialog/index",
     "van-radio": "./pages/vant/radio/index",
-    "van-radio-group": "./pages/vant/radio-group/index"
+    "van-radio-group": "./pages/vant/radio-group/index",
+    "van-picker": "./pages/vant/picker/index",
+    "van-popup": "./pages/vant/popup/index",
+    "van-tabbar": "./pages/vant/tabbar/index",
+    "van-tabbar-item": "./pages/vant/tabbar-item/index"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/list/list",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/myAdd/myAdd",
+        "text": "我的"
+      }
+    ]
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",

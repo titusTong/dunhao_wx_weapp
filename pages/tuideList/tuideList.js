@@ -21,7 +21,6 @@ Page({
     curUserOpenId: ''
 
   },
-
   /**
    * 生命周期函数--监听页面加载
    */
@@ -55,7 +54,8 @@ Page({
   },
   getDateList: async function() {
     let params = {
-      monthDate: moment().format('YYYY-MM')
+      monthDate: moment().format('YYYY-MM'),
+      tripsWithinTheCalendar: true
     }
     if(this.data.openId) {
       params.openId = this.data.openId
@@ -87,6 +87,7 @@ Page({
         colorDate: colorDate,
         isShowLoading: false
       })
+      
     }
   },
   gotoDetail: function (event) {
@@ -131,7 +132,6 @@ Page({
     if(this.data.openId) {
       params.openId = this.data.openId
     }
-
     
     this.setData({isShowLoading: true});
     const res = await app.call({

@@ -1,9 +1,0 @@
-/**index.wxss**/
-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.calendar {
-  --calendar-height: 63vh;
-}
