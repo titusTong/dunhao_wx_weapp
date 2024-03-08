@@ -6,7 +6,7 @@
   border-bottom: 1px solid #f0f0f0;
 }
 .scroll-height {
-  height: calc(100vh - 108px - 60px);
+  height: calc(100vh - 108px - 70px);
 }
 .calendar-custom-class {
   padding-top: 0 !important;

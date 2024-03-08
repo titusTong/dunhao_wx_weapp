@@ -4,3 +4,47 @@
   bottom: 0;
   width: 100% !important;
 }
+.scroll-height {
+  height: 40vh;
+}
+.fileList {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.fileList-left {
+  width: 83%;
+}
+.fileImg {
+  width: 32px;
+  height: 24px;
+  display: inline-block;
+  vertical-align:top;
+}
+image {
+  width: 100%;
+  height: 100%;
+}
+.fileName {
+  max-width: calc(100% - 40px);
+  display: inline-block;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.delete {
+  min-width: 100rpx;
+  text-align: right;
+  font-size: 20px;
+  margin-top: 2px;
+  margin-right: 10px;
+}
+.progress {
+  margin: 0 10px;
+}
+.wrapper {
+  height: 100%;
+  text-align: center;
+}

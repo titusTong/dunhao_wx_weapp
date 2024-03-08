@@ -76,7 +76,29 @@
       label="备注"
       placeholder="请输入备注"
     />
+    <van-cell title="文件">
+      <van-uploader disabled="{{uploadLoading}}" multiple accept="all" bind:click-preview="clickPreview" bind:after-read="afterRead">
+        <van-button loading="{{uploadLoading}}"  loading-text="正在上传" size="small" type="danger" icon="photo" type="primary">上传文件</van-button>
+      </van-uploader>
+    </van-cell>
     
+    <scroll-view scroll-y="true" class="scroll-height">
+      <block wx:if="{{ fileList && fileList.length }}">
+        <block wx:for="{{ fileList }}" wx:for-item="item" wx:for-index="index" wx:key="index">
+          <view class="fileList">
+            <view class="fileList-left" data-filetype="{{item.fileType}}" data-fileID="{{item.fileID}}" bind:tap="previewFile">
+              <view class="fileImg"><image mode='aspectFill' lazy-load='true' src="{{item.icon}}" /></view>
+              <view class="fileName">{{ item.name }}</view>
+            </view>
+            <view wx:if="{{!uploadLoading}}" data-index="{{index}}" bind:tap="deleteItem" class="delete"><van-icon name="delete-o" /></view>
+          </view>
+          <van-progress custom-class="progress" color="{{item.isSuccess ? '#07c160' : '#ee0a24'}}" stroke-width="2px" percentage="{{item.progress}}" />
+        </block>
+      </block>
+    </scroll-view>
   </van-cell-group>
   <van-button bind:click="submit" disabled="{{isDisabled}}" block class="submitBtn" type="danger">提交</van-button>
+  <!-- <view wx:if="{{openLoading}}" class="loading">
+    <van-loading  />
+  </view> -->
 </view>

@@ -2,6 +2,12 @@
 import Notify from '../vant/notify/notify';
 import moment from 'moment';
 import { getAllDate } from '../../utils/getFullDate.js';
+const pdf = '../../static/imgs/pdf.png';
+const jpg = '../../static/imgs/jpg.png';
+const ppt = '../../static/imgs/ppt.png';
+const word = '../../static/imgs/word.png';
+const excel = '../../static/imgs/excel.png';
+const buchangjianleixing = '../../static/imgs/buchangjianleixing.png';
 var app = getApp();
 Page({
   /**
@@ -24,7 +30,14 @@ Page({
 
     isDisabled: true,
     id: '',
-    defaultDate: []
+    defaultDate: [],
+    fileList: [],
+
+    uploadLoading: false,
+    showImg: false,
+    imageUrl: '',
+
+    // openLoading: false
     
     
     
@@ -47,6 +60,161 @@ Page({
       guideType: event.target.dataset.value
     })
   },
+
+  afterRead(event) {
+    const { file } = event.detail;
+    console.log('file', file);
+    let newList = this.getFileType(file);
+    this.setData({
+      fileList: [...newList, ...this.data.fileList]
+    }, () => {
+      this.uploadToCloud();
+    })
+    
+    
+  },
+  getFileType(arr) {
+    let pptType = ['ppt','pptx','pot','potx','pps','ppsx','dps','dpt','pptm','potm','ppsm'];
+    let excelType = ['xlsx','xls','csv','xlt','et','ett','xltx','xlsb','xlsm','xltm'];
+    let docType = ['dotx','docm','dotm','docx', 'doc','dot', 'wps', 'wpt'];
+    let imgType = ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'tif'];
+    let pdfType = ['pdf'];
+    arr = arr.map(item => {
+      let typeArr = item.name.split('.');
+      let type = typeArr[typeArr.length - 1];
+      item.fileType = type;
+      console.log('type', type.toLocaleLowerCase());
+      if(pdfType.indexOf(type.toLocaleLowerCase()) > -1) {
+        item.icon = pdf;
+      } else if(pptType.indexOf(type.toLocaleLowerCase())  > -1 ) {
+        item.icon = ppt;
+      } else if(excelType.indexOf(type.toLocaleLowerCase())  > -1 ) {
+        item.icon = excel;
+      } else if(docType.indexOf(type.toLocaleLowerCase())  > -1 ) {
+        item.icon = word;
+      } else if(imgType.indexOf(type.toLocaleLowerCase())  > -1 ) {
+        item.icon = jpg;
+      } else {
+        item.icon = buchangjianleixing;
+      }
+      item.isSuccess = true;
+      return item;
+    });
+    return arr;
+  },
+  clickPreview(event) {
+    console.log('event', event);
+  },
+  async uploadToCloud() {
+    
+    const { fileList } = this.data;
+    this.setData({
+      uploadLoading: true
+    })
+    for(let i = 0; i < fileList.length; i ++) {
+      let file = fileList[i];
+      console.log('file', file);
+      if(!file.isUpload) {
+        let uploadTask = this.uploadFilePromise(file.name, file, (res) => {
+          if(res.fileID) {
+            file.fileID = res.fileID;
+            file.isSuccess = true;
+            file.isUpload = true;
+          }
+          this.setData({
+            fileList
+          })
+          this.getIsAllUpload(fileList);
+        }, (error) => {
+          file.isSuccess = false;
+          file.isUpload = true;
+          this.setData({
+            fileList
+          })
+          this.getIsAllUpload(fileList);
+        });
+        uploadTask.onProgressUpdate((res) => {
+          file.progress = res.progress;
+          this.setData({
+            fileList
+          })
+        })
+      }
+
+      //检查是否全部上传
+
+      
+        
+    }
+  },
+  deleteItem(event) {
+    let idx = event.currentTarget.dataset.index;
+    let fileList = this.data.fileList;
+    fileList = fileList.filter((item, index) => index !== idx);
+    console.log('fileList', fileList);
+    this.setData({
+      fileList
+    })
+  },
+  onClose() {
+    this.setData({
+      showImg: false
+    })
+  },
+  previewFile(event) {
+    let fileID = event.currentTarget.dataset.fileid;
+    let fileType = event.currentTarget.dataset.filetype;
+    if(!fileID) return;
+    // this.setData({
+    //   openLoading: true
+    // });
+    wx.showLoading({
+      title: '加载中',
+    })
+    let _this = this;
+    wx.cloud.downloadFile({
+      // 示例 url，并非真实存在
+      fileID,
+      
+      success: function (res) {
+        const filePath = res.tempFilePath;
+        console.log('filePath', filePath);
+        console.log('fileType', fileType);
+        wx.openDocument({
+          filePath,
+          fileType,
+          showMenu: true,
+          success: function (res) {
+            wx.hideLoading()
+          },
+          fail: function(error) {
+            wx.hideLoading()
+          }
+        })
+      }
+    })
+    
+    
+  },
+  getIsAllUpload(fileList) {
+    let isAllUpload = fileList.every(item => item.isUpload);
+      if(isAllUpload) {
+        this.setData({
+          uploadLoading: false
+        })
+      }
+  },
+  uploadFilePromise(fileName, chooseResult, success, fail) {
+    return wx.cloud.uploadFile({
+      cloudPath: fileName,
+      filePath: chooseResult.url,
+      config: {
+        env: 'prod-5gaf0xgg89478f9e'
+      },
+      success,
+      fail
+    });
+  },
   
   async submit() {
     console.log(this.data);
@@ -66,6 +234,10 @@ Page({
       Notify({backgroundColor: '#ad0000',message: '请选择团期', selector: '#custom-selector', context: this, duration: 1500});
       return;
     }
+    if(this.data.fileList && this.data.fileList.some(item => !item.isSuccess)) {
+      Notify({backgroundColor: '#ad0000',message: '请删除且重新上传失败的文件', selector: '#custom-selector', context: this, duration: 1500});
+      return;
+    }
     let params = {
       tripName: this.data.tripName,
       guideType: this.data.guideType,
@@ -75,6 +247,7 @@ Page({
       outArea: this.data.outArea,
       remark: this.data.remark,
       guideOpenId: this.data.guideOpenId,
+      fileList: this.data.fileList
     }
     let url = '/trip/createTrip';
     if(this.data.id) {
@@ -89,7 +262,7 @@ Page({
       data: params
     })
     if(res.code == 1) {
-      Notify({type: 'success',message: '注册成功', selector: '#custom-selector', context: this, duration: 1500});
+      // Notify({type: 'success',message: '注册成功', selector: '#custom-selector', context: this, duration: 1500});
       const pages = getCurrentPages();
       const prePages = pages[pages.length - 2];
       prePages.getDateList();
@@ -125,6 +298,7 @@ Page({
    */
   onLoad:function(options) {
     let _this = this;
+    wx.cloud.init();
     wx.setNavigationBarTitle({
       title: '添加或编辑行程'
     });
